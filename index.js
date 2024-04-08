@@ -17,7 +17,7 @@ app.use(cors({
     origin: ["http://localhost:3001", "https://userauthentication-znsd.onrender.com"]
 }));
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect("mongodb+srv://rajankumar_mandanka_114763:123@sample.nwaaia2.mongodb.net/?retryWrites=true&w=majority&appName=Sample")
 .then(console.log("Connected"))
 .catch(err => console.log("Error"))
 
@@ -64,7 +64,7 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ email: user.email }, JWT_SECRET);
+        const token = jwt.sign({ email: user.email }, "secretkey");
 
         res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
