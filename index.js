@@ -4,14 +4,21 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://rajankumar_mandanka_114763:123@sample.nwaaia2.mongodb.net/?retryWrites=true&w=majority&appName=Sample';
+const JWT_SECRET = process.env.JWT_SECRET || 'secretkey';
+
+// const PORT = 4000;
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:3001", "https://userauthentication-znsd.onrender.com"]
+}));
 
-mongoose.connect('mongodb+srv://rajankumar_mandanka_114763:123@sample.nwaaia2.mongodb.net/?retryWrites=true&w=majority&appName=Sample')
+mongoose.connect(MONGODB_URI)
 .then(console.log("Connected"))
 .catch(err => console.log("Error"))
 
@@ -58,7 +65,7 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ email: user.email }, 'secretkey');
+        const token = jwt.sign({ email: user.email }, JWT_SECRET);
 
         res.status(200).json({ message: 'Login successful', token });
     } catch (error) {
